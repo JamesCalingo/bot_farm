@@ -17,5 +17,5 @@ func GetQuote() string {
 	data, _ := io.ReadAll(res.Body)
 	json.Unmarshal(data, &quote)
 
-	return quote[0].Q + "\n-" + quote[0].A
+	return "\"" + quote[0].Q + "\"\n-" + quote[0].A
 }

@@ -1,16 +1,15 @@
 import os
 import discord
-import requests
+import json
 from dotenv import load_dotenv
+from get_quote import get_quote
+from get_challenge import get_challenge, get_challenge_list
+
+file = open("../challenges.json")
+challenges = json.load(file)
 
 load_dotenv()
 token = os.getenv('PYTHON')
-
-def get_quote():
-    raw = requests.get("https://zenquotes.io/api/random")
-    res = raw.json()[0]
-    return f'{res["q"]}\n-{res["a"]}'
-
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -26,10 +25,16 @@ async def on_message(message):
     if message.author == client.user:
         return
     
-    if message.content.startswith("!hello"):
+    if message.content.startswith("$hello"):
         await message.channel.send(f"Ahoy hoy, {message.author}")
 
-    if message.content.startswith("!quote"):
+    if message.content.startswith("$quote"):
         await message.channel.send(get_quote())
+
+    if message.content.startswith("$challenge"):
+        await message.channel.send("YOU WANT A CHALLENGE? How about: " + get_challenge(challenges["challenges"]))
+
+    if message.content.startswith("$list"):
+        await message.channel.send("The (bad word) List:\n" + get_challenge_list(challenges["challenges"]))
 
 client.run(token)
