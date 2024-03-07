@@ -34,14 +34,14 @@ func Run() {
 }
 
 func newMessage(discord *discordgo.Session, message *discordgo.MessageCreate) {
-	fmt.Println("New message incoming!")
 	if message.Author.ID == discord.State.User.ID {
 		return
 	}
 
 	switch {
-	case strings.Contains(message.Content, "&help"):
-		discord.ChannelMessageSend(message.ChannelID, "I do need someone...")
+	case strings.Contains(message.Content, "&hello"):
+		greeting := "Hello " + message.Author.Username
+		discord.ChannelMessageSend(message.ChannelID, greeting)
 	case strings.Contains(message.Content, "&quote"):
 		discord.ChannelMessageSend(message.ChannelID, "Something smart")
 	case strings.Contains(message.Content, "&delete") || strings.Contains(message.Content, "DELETED"):
