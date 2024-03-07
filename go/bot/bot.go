@@ -43,8 +43,6 @@ func newMessage(discord *discordgo.Session, message *discordgo.MessageCreate) {
 		greeting := "Hello " + message.Author.Username
 		discord.ChannelMessageSend(message.ChannelID, greeting)
 	case strings.Contains(message.Content, "&quote"):
-		discord.ChannelMessageSend(message.ChannelID, "Something smart")
-	case strings.Contains(message.Content, "&delete") || strings.Contains(message.Content, "DELETED"):
-		discord.ChannelMessageSend(message.ChannelID, "MATT!")
+		discord.ChannelMessageSend(message.ChannelID, GetQuote())
 	}
 }
