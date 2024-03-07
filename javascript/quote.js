@@ -19,15 +19,12 @@ client.on("ready", ()=> {
 
 client.on("message", msg => {
   if(msg.author.bot) return
-  else if(msg.content.includes("qhote")){
-    msg.channel.send("use $quote)")
-  }
-  else if(msg.content === "$quote"){
+if(msg.content === "$quote"){
     getQuote()
     .then(quote => msg.channel.send(quote))
   }
 
-  if(msg.content.startsWith("$creategame"))
+  // if(msg.content.startsWith("$creategame"))
 });
 
 client.login(process.env.TOKEN);
