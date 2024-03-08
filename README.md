@@ -17,7 +17,7 @@ There are three bots in this repository. Currently, I have them set so that you 
 Both the Python and Go bots have the same set of basic commands:
 
 - `hello` - the bot will reply with a short message which includes your username
-- `quote` - the bot will reply with a quote at random from [this API]("https://zenquotes.io/api/random")
+- `quote` - the bot will reply with a quote at random from `"https://zenquotes.io/api/random"`
 - `challenge` - the bot will reply with one of the [Coding Challenges](https://codingchallenges.fyi), selected at random
 - `list` - the bot will reply with a (partial) list of the aforementioned Coding Challenges.
 - `add` - if a link to a [Coding Challenge](https://codingchallenges.fyi) is included with this command, the bot will add it to its list of Coding Challenges. Otherwise, it will reply that it can't do anything.
