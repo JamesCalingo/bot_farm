@@ -55,7 +55,7 @@ func newMessage(discord *discordgo.Session, message *discordgo.MessageCreate) {
 			discord.ChannelMessageSend(message.ChannelID, "This is not a valid URL.")
 			break
 		}
-		added := "Added: " + newChallenge.Name + " " + newChallenge.URL
+		added := "$add" + " " + newChallenge.URL
 		discord.ChannelMessageSend(message.ChannelID, added)
 	}
 }
