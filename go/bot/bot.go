@@ -18,8 +18,6 @@ func checkError(err error) {
 	}
 }
 
-
-
 func Run() {
 	discord, err := discordgo.New("Bot " + Token)
 	checkError(err)
@@ -51,6 +49,13 @@ func newMessage(discord *discordgo.Session, message *discordgo.MessageCreate) {
 	case strings.Contains(message.Content, "&list"):
 		discord.ChannelMessageSend(message.ChannelID, GetChallengeList("../challenges.json"))
 	case strings.Contains(message.Content, "&add"):
-		discord.ChannelMessageSend(message.ChannelID, "Will Add Soon.")
+		_, url, _ := strings.Cut(message.Content, " ")
+		newChallenge, err := AddChallenge(url)
+		if err != nil {
+			discord.ChannelMessageSend(message.ChannelID, "This is not a valid URL.")
+			break
+		}
+		added := "Added: " + newChallenge.Name + " " + newChallenge.URL
+		discord.ChannelMessageSend(message.ChannelID, added)
 	}
 }
