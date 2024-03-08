@@ -3,7 +3,7 @@ import discord
 import json
 from dotenv import load_dotenv
 from get_quote import get_quote
-from challenges import get_random_challenge, get_challenge_list
+from challenges import get_random_challenge, get_challenge_list, add_challenge
 
 file = open("../challenges.json")
 challenges = json.load(file)
@@ -38,6 +38,11 @@ async def on_message(message):
         await message.channel.send("The (bad word) List:\n" + get_challenge_list(challenges))
 
     if message.content.startswith("$add"):
-        await message.channel.send("IN PROGRESS")
+        space = message.content.find(" ")
+        url = message.content[space+1:]
+        new_challenge = add_challenge(url)
+        challenges.append(new_challenge)
+        added = f"Added: {new_challenge['name']} {new_challenge['url']}"
+        await message.channel.send(added)
 
 client.run(token)
