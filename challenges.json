@@ -1,5 +1,4 @@
-{
- "challenges": [
+[
      {
          "name": "Write Your Own wc Tool",
          "url": "https://codingchallenges.fyi/challenges/challenge-wc"
@@ -73,4 +72,3 @@
          "url": "https://codingchallenges.fyi/challenges/challenge-spotify"
      }
  ]
-}

@@ -8,11 +8,6 @@ import (
 	"github.com/joho/godotenv"
 )
 
-type Quote struct {
-	Q string `json:"q"`
-	A string `json:"a"`
-}
-
 func getToken(key string) string {
 	err := godotenv.Load("../.env")
 	if err != nil {

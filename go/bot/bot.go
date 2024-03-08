@@ -18,6 +18,8 @@ func checkError(err error) {
 	}
 }
 
+
+
 func Run() {
 	discord, err := discordgo.New("Bot " + Token)
 	checkError(err)
@@ -44,5 +46,11 @@ func newMessage(discord *discordgo.Session, message *discordgo.MessageCreate) {
 		discord.ChannelMessageSend(message.ChannelID, greeting)
 	case strings.Contains(message.Content, "&quote"):
 		discord.ChannelMessageSend(message.ChannelID, GetQuote())
+	case strings.Contains(message.Content, "&challenge"):
+		discord.ChannelMessageSend(message.ChannelID, GetRandomChallenge("../challenges.json"))
+	case strings.Contains(message.Content, "&list"):
+		discord.ChannelMessageSend(message.ChannelID, GetChallengeList("../challenges.json"))
+	case strings.Contains(message.Content, "&add"):
+		discord.ChannelMessageSend(message.ChannelID, "Will Add Soon.")
 	}
 }
