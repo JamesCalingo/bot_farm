@@ -9,7 +9,7 @@ function getQuote() {
     return res.json()
   })
   .then(data => {
-    return data[0]["q"] + " -" + data[0]["a"]
+    return data[0]["q"] + "\n-" + data[0]["a"]
   })
 }
 
@@ -24,7 +24,6 @@ if(msg.content === "$quote"){
     .then(quote => msg.channel.send(quote))
   }
 
-  // if(msg.content.startsWith("$creategame"))
 });
 
 client.login(process.env.TOKEN);

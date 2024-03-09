@@ -23,6 +23,23 @@ Both the Python and Go bots have the same set of basic commands:
 - `add` - if a link to a [Coding Challenge](https://codingchallenges.fyi) is included with this command, the bot will add it to its list of Coding Challenges. Otherwise, it will reply that it can't do anything.
   (NOTE: This is currently only active with the Python bot)
 
+## The Process
+
+I'll use a more "general" approach to describing how I did this.
+
+The first thing we need: connection to Discord. This not only means setting up the bot on Discord itself, but connecting it to our code. For the Python bot, I used [discord.py](https://discordpy.readthedocs.io/en/stable/), and for the Go bot, [this DiscordGo package](https://github.com/bwmarrin/discordgo). For setting up the actual bots on Discord itself, the Python version has a 
+
+Most languages have 
+
+Second, we need to get quotes. The API I mentioned in the list 
+
+Notably, it returns an array of length 1 with the data in it, so kinda have to "hack" our way into that 
+
+Next, the stuff involving challenges. John Crickett provided a list of challenges from a while ago, and while it is simple and helpful, I noticed
+
+He started the titles off with "Write", but his website uses the word "Build"! 
+
+
 ## The future
 
 Currently, these bots have "on" and "off" buttons, so they're not always "on". I'd like to look into running them "full time", but alas, a lot of the free options that used to exist no longer do.
