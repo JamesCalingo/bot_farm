@@ -19,7 +19,7 @@ type Challenge struct {
 	URL  string `json:"url"`
 }
 
-func open(fileName string) Challenges {
+func Open(fileName string) Challenges {
 	var challenges Challenges
 	file, fileErr := os.Open(fileName)
 	if fileErr != nil {
@@ -31,16 +31,14 @@ func open(fileName string) Challenges {
 	return challenges
 }
 
-func GetRandomChallenge(filename string) string {
-	list := open(filename)
+func GetRandomChallenge(list Challenges) string {
 	index := rand.Intn(len(list))
 	randomChallenge := list[index]
 	return randomChallenge.Name + ": " + randomChallenge.URL
 }
 
-func GetChallengeList(filename string) string {
+func GetChallengeList(list Challenges) string {
 	var output string
-	list := open(filename)
 	for i := 0; i < len(list); i++ {
 		output += list[i].Name + ": " + list[i].URL + "\n"
 	}

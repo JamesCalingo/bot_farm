@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"gofer_gopher/bot"
 	"io"
 	"log"
 	"net/http"
@@ -33,7 +34,7 @@ func testAdd(url string) {
 }
 
 func main() {
-	testAdd("https://codingchallenges.fyi/challenges/challenge-password-cracker")
-	// bot.Token = getToken("GO")
-	// bot.Run()
+	// testAdd("https://codingchallenges.fyi/challenges/challenge-password-cracker")
+	bot.Token = getToken("GO")
+	bot.Run()
 }

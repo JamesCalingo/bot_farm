@@ -40,9 +40,12 @@ async def on_message(message):
     if message.content.startswith("$add"):
         space = message.content.find(" ")
         url = message.content[space+1:]
-        new_challenge = add_challenge(url)
-        challenges.append(new_challenge)
-        added = f"Added: {new_challenge['name']} {new_challenge['url']}"
-        await message.channel.send(added)
+        new_challenge = add_challenge(url, challenges)
+        if type(new_challenge) is str:
+            await message.channel.send(new_challenge)
+        else:
+            challenges.append(new_challenge)
+            added = f"Added: {new_challenge['name']} {new_challenge['url']}"
+            await message.channel.send(added)
 
 client.run(token)

@@ -12,12 +12,15 @@ def get_challenge_list(list):
         output += f"{challenge['name']}: {challenge['url']}\n"
     return output
 
-def add_challenge(url):
+def add_challenge(url, list):
     if url == "":
         return "To add a challenge to my list, please type \"$add \" and then the url of the challenge you want to add"
     valid = re.search("^https://codingchallenges.fyi/challenges/", url)
     if not valid:
         return "This is not a valid challenge. Check your URL and try again."
+    for challenge in list:
+        if url == challenge["url"]:
+            return "This challenge is already in the list.\n" + get_challenge_list(list)
     raw = requests.get(url)
     res = raw.text
     start = res.find("Build")
