@@ -1,13 +1,9 @@
 package main
 
 import (
-	"fmt"
 	"gofer_gopher/bot"
-	"io"
 	"log"
-	"net/http"
 	"os"
-	"strings"
 
 	"github.com/joho/godotenv"
 )
@@ -20,21 +16,11 @@ func getToken(key string) string {
 	return os.Getenv(key)
 }
 
-func testAdd(url string) {
-
-	res, err := http.Get(url)
-	if err != nil {
-		log.Fatal(err)
-	}
-	data, _ := io.ReadAll(res.Body)
-	website := string(data)
-	title := strings.Contains(website, "<title")
-	fmt.Println(title)
-
-}
-
 func main() {
-	// testAdd("https://codingchallenges.fyi/challenges/challenge-password-cracker")
+	// _, err := bot.AddChallenge("https://codingchallenges.fyi/challenges/challenge-password")
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
 	bot.Token = getToken("GO")
 	bot.Run()
 }

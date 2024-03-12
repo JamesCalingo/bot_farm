@@ -3,13 +3,14 @@ package bot
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io"
 	"log"
 	"math/rand"
 	"net/http"
 	"os"
 	"strings"
+
+	"github.com/PuerkitoBio/goquery"
 )
 
 type Challenges []Challenge
@@ -50,12 +51,18 @@ func AddChallenge(url string) (Challenge, error) {
 	if !strings.Contains(url, "https://codingchallenges.fyi/challenges/") {
 		return newChallenge, errors.New("invalid url")
 	}
-	website, err := http.Get(url)
+	res, err := http.Get(url)
 	if err != nil {
-		return newChallenge, errors.New("error on get")
+		return newChallenge, errors.New("error on get request")
 	}
-	fmt.Println(website)
-	newChallenge.Name = "Build A Thing"
+	if res.StatusCode != 200 {
+		return newChallenge, errors.New("status code not 200")
+	}
+	defer res.Body.Close()
+	website, _ := goquery.NewDocumentFromReader(res.Body)
+	title := website.Find("Title").Text()
+	name, _, _ := strings.Cut(title, " |")
+	newChallenge.Name = name
 	newChallenge.URL = url
 	return newChallenge, nil
 }
