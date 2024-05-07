@@ -1,7 +1,6 @@
 package bot
 
 import (
-	"fmt"
 	"slices"
 )
 
@@ -22,10 +21,9 @@ func (g *Game) toggleLobby() {
 
 func (g *Game) joinGame(id string) {
 	g.players = append(g.players, id)
-	fmt.Println(g.players)
 }
 
-func (g *Game) start() {
+func (g *Game) clear() {
 	g.toggleLobby()
 	g.players = slices.Delete(g.players, 0, len(g.players))
 }

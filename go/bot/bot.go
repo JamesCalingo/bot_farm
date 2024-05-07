@@ -74,29 +74,52 @@ func newMessage(discord *discordgo.Session, message *discordgo.MessageCreate) {
 		return
 	}
 
+	adminCheck := func(id string) bool {
+		permissions, err := discord.UserChannelPermissions(id, message.ChannelID)
+		if err != nil {
+			log.Fatal(err)
+		}
+		if permissions&discordgo.PermissionAdministrator == 0 {
+			return false
+		}
+		return true
+	}
+
+	notAuthorized := func() {
+		discord.ChannelMessageSend(message.ChannelID, "You do not have permission to use this command.")
+	}
+
 	switch {
 	case strings.EqualFold(message.Content, "!openlobby") && game.isRunning:
 		discord.ChannelMessageSend(message.ChannelID, "The lobby is already open")
 
 	case strings.EqualFold(message.Content, "!openlobby"):
+		if !adminCheck(message.Author.ID) {
+			notAuthorized()
+			return
+		}
 		game.toggleLobby()
 		if !contains(game.roles, "mafioso") {
 			game.roles = append(game.roles, "mafioso")
 		}
 		discord.ChannelMessageSend(message.ChannelID, "Starting a new game of Mafia. Type \"!join\" to join in.")
 
-	case (strings.EqualFold(message.Content, "!join") || strings.EqualFold(message.Content, "!start") || strings.HasPrefix(strings.ToLower(message.Content), "!add")) && !game.isRunning:
+	case (strings.EqualFold(message.Content, "!join") || strings.EqualFold(message.Content, "!start") || strings.HasPrefix(strings.ToLower(message.Content), "!add") || strings.HasPrefix(strings.ToLower(message.Content), "!remove")) && !game.isRunning:
 		discord.ChannelMessageSend(message.ChannelID, "There is no active game going on right now. use !openlobby to start a game.")
 
 	case strings.EqualFold(message.Content, "!join"):
-		if contains(game.players, message.Author.ID) {
-			discord.ChannelMessageSend(message.ChannelID, "You're already in the game!")
-			return
-		}
+		// if contains(game.players, message.Author.ID) {
+		// 	discord.ChannelMessageSend(message.ChannelID, "You're already in the game!")
+		// 	return
+		// }
 		discord.ChannelMessageSend(message.ChannelID, message.Author.Username+" has joined.")
 		game.joinGame(message.Author.ID)
 
 	case strings.HasPrefix(strings.ToLower(message.Content), "!add"):
+		if !adminCheck(message.Author.ID) {
+			notAuthorized()
+			return
+		}
 		newRole := strings.TrimPrefix(strings.ToLower(message.Content), "!add ")
 		if !contains(validRoles, newRole) {
 			discord.ChannelMessageSend(message.ChannelID, "This role cannot be added.")
@@ -107,6 +130,10 @@ func newMessage(discord *discordgo.Session, message *discordgo.MessageCreate) {
 		discord.ChannelMessageSend(message.ChannelID, printRoles(game.roles))
 
 	case strings.HasPrefix(strings.ToLower(message.Content), "!remove"):
+		if !adminCheck(message.Author.ID) {
+			notAuthorized()
+			return
+		}
 		role := strings.TrimPrefix(strings.ToLower(message.Content), "!remove ")
 		if !contains(game.roles, role) {
 			discord.ChannelMessageSend(message.ChannelID, "This role is not in this game.")
@@ -123,7 +150,12 @@ func newMessage(discord *discordgo.Session, message *discordgo.MessageCreate) {
 		discord.ChannelMessageSend(message.ChannelID, printRoles(game.roles))
 
 	case strings.EqualFold(message.Content, "!start"):
-		if len(game.players) == 0 {
+		if !adminCheck(message.Author.ID) {
+			notAuthorized()
+			return
+		}
+		if len(game.players) < 2 {
+			discord.ChannelMessageSend(message.ChannelID, "Not enough players to start game.")
 			return
 		}
 		if len(game.roles) > len(game.players) {
@@ -158,8 +190,11 @@ func newMessage(discord *discordgo.Session, message *discordgo.MessageCreate) {
 			discord.ChannelMessageSend(dm.ID, output)
 			game.roles = slices.Delete(game.roles, i, i+1)
 		}
-		game.start()
-		fmt.Println(game)
+		game.clear()
+
+	case strings.EqualFold(message.Content, "!cancel"):
+		game.clear()
+
 	}
 
 }
